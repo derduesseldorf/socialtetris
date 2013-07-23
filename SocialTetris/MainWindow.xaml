@@ -1,0 +1,54 @@
+﻿<Window x:Class="SocialTetris.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        KeyDown="HandleKeyDown"
+        Initialized="MainWindow_Initialized"
+        Background="CadetBlue"
+        Title="Social Tetris v 1.0" Height="550" Width="525">
+    <DockPanel LastChildFill="True">
+        <StackPanel DockPanel.Dock="Right" Width="172">
+            <Label Content="Label" Height="56" Name="Score" FontSize="28" FontWeight="Bold" />
+            <Label Content="Label" Height="56" Name="Lines" FontSize="28" FontWeight="Bold" />
+        </StackPanel>
+        
+        <Grid Height="500" Width="250" Name="MainGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+        </Grid>
+        
+    </DockPanel>
+</Window>
