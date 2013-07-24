@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -17,6 +13,7 @@ namespace SocialTetris.Controller
         private int LinesFilled;
         private Tetramino currTetramino;
         private Label[,] BlockControls;
+        private bool gameOver = false; 
 
         static private Brush NoBrush = Brushes.Transparent;
         static private Brush SilverBrush = Brushes.Gray; 
@@ -30,6 +27,7 @@ namespace SocialTetris.Controller
             LinesFilled = 0; 
 
             BlockControls = new Label[Cols, Rows];
+
             for (int i = 0; i < Cols; i++)
             {
                 for (int j = 0; j < Rows; j++)
@@ -85,6 +83,7 @@ namespace SocialTetris.Controller
         private void CheckRows()
         {
             bool full;
+
             for (int i = Rows - 1; i > 0; i--)
             {
                 full = true;
@@ -107,7 +106,7 @@ namespace SocialTetris.Controller
 
         private void RemoveRow(int row)
         {
-            for (int i = row; i > 2; i--)
+            for (int i = row; i > 0; i--)
             {
                 for (int j = 0; j < Cols; j++)
                 {
@@ -216,7 +215,17 @@ namespace SocialTetris.Controller
             {
                 currTetraminoDraw();
                 CheckRows();
-                currTetramino = new Tetramino();
+
+                if ((int) Position.Y == 0)
+                {
+                    gameOver = true;
+                }
+
+                else
+                {
+                    currTetramino = new Tetramino();
+                }
+                
             }
         }
 
@@ -267,6 +276,11 @@ namespace SocialTetris.Controller
             {
                 currTetraminoDraw();
             }
+        }
+
+        public bool GameOver()
+        {
+            return gameOver; 
         }
 
     }

@@ -1,20 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
-using SocialTetris.Controller; 
+using SocialTetris.Controller;
+using SocialTetris.Utils; 
 
 namespace SocialTetris
 {
@@ -24,7 +16,8 @@ namespace SocialTetris
     public partial class MainWindow : Window
     {
         private DispatcherTimer Timer;
-        private Board myBoard; 
+        private Board GameBoard;
+        private Label GameOverLabel; 
 
         public MainWindow()
         {
@@ -42,84 +35,55 @@ namespace SocialTetris
         private void GameStart()
         {
             MainGrid.Children.Clear();
-            myBoard = new Board(MainGrid);
+            GameBoard = new Board(MainGrid);
+            if (GameStatsPanel.Children.Contains(GameOverLabel))
+            {
+                GameStatsPanel.Children.Remove(GameOverLabel);
+            }
+
             Timer.Start();
         }
 
         void GameTick(object sender, EventArgs e)
         {
-            Score.Content = myBoard.getScore().ToString("000000000");
-            Lines.Content = myBoard.getLines().ToString("000000000"); 
+            Score.Content = GameBoard.getScore().ToString("000000000");
+            Lines.Content = GameBoard.getLines().ToString("000000000"); 
+            GameBoard.CurrTetraminoMovDown();
+            CheckGameState();
+        }
 
-            myBoard.CurrTetraminoMovDown();
+        private void CheckGameState()
+        {
+            if (GameBoard.GameOver())
+            {
+                GamePause();
+                GameOverLabel = UiHelper.MakeLabel("Game Over", Brushes.DarkRed, Brushes.White, FontWeights.Bold, 24); 
+                GameStatsPanel.Children.Add(GameOverLabel); 
+            }
         }
 
         private void HandleKeyDown(object sender, KeyEventArgs e)
         {
             switch (e.Key)
             {
-                case Key.Left:
-             
-                if (Timer.IsEnabled)
-                {
-                    myBoard.CurrTetraminoMovLeft();
-                }
-
-                break;
-
-                case Key.Right:
-
-                if (Timer.IsEnabled)
-                {
-                    myBoard.CurrTetraminoMovRight();
-                }
-
-                break;
-
-                case Key.Down:
-
-                if (Timer.IsEnabled)
-                {
-                    myBoard.CurrTetraminoMovDown();
-                }
-
-                break;
-
-                case Key.Up:
-
-                if (Timer.IsEnabled)
-                {
-                    myBoard.CurrTetraminoMovRotate();
-                }
-
-                break; 
-
-                case Key.F2:
-                    GameStart();
+                case Key.Left:      if (Timer.IsEnabled) { GameBoard.CurrTetraminoMovLeft(); } break;
+                case Key.Right:     if (Timer.IsEnabled) { GameBoard.CurrTetraminoMovRight(); } break;
+                case Key.Down:      if (Timer.IsEnabled) { GameBoard.CurrTetraminoMovDown(); } break; 
+                case Key.Up:        if (Timer.IsEnabled) { GameBoard.CurrTetraminoMovRotate(); } break; 
+                case Key.F2:        GameStart(); break; 
+                case Key.F3:        
+                    if(!GameBoard.GameOver()) GamePause(); 
+                    else GameStart();
                     break; 
 
-                case Key.F3:
-                GamePause(); 
-                break; 
-
-                break;
-
-                default:
-                break; 
+                default: break; 
             }
         }
 
         private void GamePause()
         {
-            if (Timer.IsEnabled)
-            {
-                Timer.Stop();
-            }
-
-            else
-            {
-                Timer.Start();
-            }
+            if (Timer.IsEnabled) { Timer.Stop(); }
+            else { Timer.Start(); }
         }
     }
 }
